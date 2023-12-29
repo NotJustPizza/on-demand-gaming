@@ -1,0 +1,32 @@
+version: "3"
+
+includes:
+  _docker:
+    taskfile: _docker.yml
+    internal: true
+
+tasks:
+  _run-with-vars:
+    internal: true
+    vars:
+      IMAGE_WORKDIR: '{{or .IMAGE_WORKDIR (fail "Variable IMAGE_WORKDIR required")}}'
+    env:
+      GOPATH: '{{.IMAGE_WORKDIR}}'
+    cmds:
+      - task: _docker:_run
+        vars:
+          ENTRYPOINT: go
+          IMAGE_ARGS: '{{.IMAGE_ARGS}}'
+          IMAGE_WORKDIR: '{{.IMAGE_WORKDIR}}/src'
+  vendor:
+    desc: Get dependencies
+    cmds:
+      - task: _run-with-vars
+        vars:
+          IMAGE_ARGS: mod vendor
+  test:
+    desc: Test your code
+    cmds:
+      - task: _run-with-vars
+        vars:
+          IMAGE_ARGS: test -mod=vendor ./...

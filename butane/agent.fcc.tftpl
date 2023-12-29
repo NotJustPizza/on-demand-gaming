@@ -1,0 +1,40 @@
+variant: flatcar
+version: 1.0.0
+systemd:
+  units:
+    - name: k3s-install.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Run K3s install script
+        Wants = network-online.target
+        After = network.target network-online.target
+        ConditionPathExists=/opt/k3s-install.sh
+        ConditionPathExists=!/opt/bin/k3s
+        [Service]
+        Type=forking
+        TimeoutStartSec=180
+        RemainAfterExit=yes
+        KillMode=process
+        Environment="K3S_TOKEN=${k3s_token}"
+        Environment="INSTALL_K3S_EXEC=agent"
+        Environment="INSTALL_K3S_VERSION=${k3s_version}"
+        ExecStart=/usr/bin/sh -c "/opt/k3s-install.sh --server ${k3s_server_url}"
+        [Install]
+        WantedBy=multi-user.target
+
+storage:
+  files:
+    - path: /opt/k3s-install.sh
+      mode: 0744
+      contents:
+        source: https://get.k3s.io
+    - path: /etc/flatcar/update.conf
+      overwrite: true
+      mode: 0644
+      contents:
+        inline: |
+          SERVER=disabled
+    - path: /etc/sysctl.d/80-swappiness.conf
+      contents:
+        inline: "vm.swappiness=0"

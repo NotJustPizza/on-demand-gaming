@@ -1,0 +1,49 @@
+version: "3"
+
+vars:
+  TOOLS_APP_NAME: 'tools'
+  TOOLS_IMAGE: '{{.TOOLS_APP_NAME}}'
+  TOOLS_IMAGE_WORKDIR: '/mnt/project'
+
+includes:
+  go:
+    taskfile: reusable/_go.yml
+    vars:
+      IMAGE: '{{.TOOLS_IMAGE}}'
+      IMAGE_WORKDIR: '{{.TOOLS_IMAGE_WORKDIR}}'
+  docker:
+    taskfile: reusable/_docker.yml
+    vars:
+      IMAGE: '{{.TOOLS_IMAGE}}'
+      IMAGE_WORKDIR: '{{.TOOLS_IMAGE_WORKDIR}}'
+  butane:agent:
+    taskfile: reusable/_butane.yml
+    vars:
+      FILE_NAME: 'agent'
+      IMAGE: '{{.TOOLS_IMAGE}}'
+      IMAGE_WORKDIR: '{{.TOOLS_IMAGE_WORKDIR}}'
+  butane:server:
+    taskfile: reusable/_butane.yml
+    vars:
+      FILE_NAME: 'server'
+      IMAGE: '{{.TOOLS_IMAGE}}'
+      IMAGE_WORKDIR: '{{.TOOLS_IMAGE_WORKDIR}}'
+  pre-commit:
+    taskfile: reusable/_pre-commit.yml
+    aliases: [pre]
+    vars:
+      IMAGE: '{{.TOOLS_IMAGE}}'
+      IMAGE_WORKDIR: '{{.TOOLS_IMAGE_WORKDIR}}'
+  terraform:
+    taskfile: reusable/_terraform.yml
+    aliases: [tf]
+    vars:
+      IMAGE: '{{.TOOLS_IMAGE}}'
+      IMAGE_WORKDIR: '{{.TOOLS_IMAGE_WORKDIR}}'
+
+tasks:
+  butane:
+    desc: Compile all .fcc to .ign
+    cmds:
+      - task: butane:agent
+      - task: butane:server

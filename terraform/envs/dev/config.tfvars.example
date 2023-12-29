@@ -1,0 +1,23 @@
+environment = "dev"
+credentials = {
+  aws = {
+    access_key = "my_access_key"
+    secret_key = "my_secret_key"
+  }
+  cloudflare = {
+    email  = "my_cloudflare_email"
+    token  = "my_cloudflare_token"
+    domain = "my_cloudflare_domain"
+  }
+  vultr = {
+    token = "my_vultr_token"
+    registry = {
+      name     = "my_vultr_registry_name"
+      username = "my_vultr_registry_username"
+      api_key  = "my_vultr_registry_api_key"
+    }
+  }
+}
+public_ssh_keys = {
+  key_name = "key_content"
+}

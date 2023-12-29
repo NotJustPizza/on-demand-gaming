@@ -1,0 +1,23 @@
+version: "3"
+
+includes:
+  _docker:
+    taskfile: _docker.yml
+    internal: true
+
+tasks:
+  install:
+    desc: Install pre-commit hook
+    dir: ../
+    cmds:
+      - cp -p tasks/scripts/pre-commit-hook.sh .git/hooks/pre-commit
+
+  default:
+    desc: Run pre-commit
+    cmds:
+      - task: _docker:_run
+        vars:
+          DOCKER_ARGS: -e PRE_COMMIT_HOME=.cache/pre-commit {{.CUSTOM_DOCKER_ARGS}}
+          ENTRYPOINT: pre-commit
+          IMAGE_ARGS: '{{.IMAGE_ARGS | default "run --all-files"}}'
+          IMAGE_WORKDIR: '{{.IMAGE_WORKDIR}}'

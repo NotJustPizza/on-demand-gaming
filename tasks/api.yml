@@ -1,0 +1,13 @@
+version: "3"
+
+vars:
+  API_APP_NAME: 'api'
+  API_IMAGE: '{{.API_APP_NAME}}'
+  API_IMAGE_WORKDIR: '/mnt/project'
+
+includes:
+  docker:
+    taskfile: reusable/_docker.yml
+    vars:
+      IMAGE: '{{.API_IMAGE}}'
+      IMAGE_WORKDIR: '{{.API_IMAGE_WORKDIR}}'

@@ -1,0 +1,29 @@
+version: "3"
+
+tasks:
+  _run:
+    internal: true
+    dir: ../
+    vars:
+      DOCKER_ARGS: '{{.DOCKER_ARGS}}'
+      ENTRYPOINT: '{{or .ENTRYPOINT (fail "Variable ENTRYPOINT required")}}'
+      IMAGE: '{{or .IMAGE (fail "Variable IMAGE required")}}'
+      IMAGE_ARGS: '{{or .IMAGE_ARGS (fail "Variable IMAGE_ARGS required")}}'
+      IMAGE_WORKDIR: '{{or .IMAGE_WORKDIR (fail "Variable IMAGE_WORKDIR required")}}'
+      PROJECT_MOUNT_DIR: '{{.PROJECT_MOUNT_DIR | default "/mnt/project"}}'
+    cmds:
+      - |
+        docker run --rm \
+            --entrypoint {{.ENTRYPOINT}} \
+            -v "{{.ROOT_DIR}}:{{.PROJECT_MOUNT_DIR}}" \
+            -w {{.IMAGE_WORKDIR}} \
+            {{.DOCKER_ARGS}} \
+        {{.IMAGE}} {{.IMAGE_ARGS}}
+
+  build:
+    desc: Build docker image using bake
+    dir: ../
+    vars:
+      IMAGE: '{{or .IMAGE (fail "Variable IMAGE required")}}'
+    cmds:
+      - docker buildx bake {{.IMAGE}} --progress=tty

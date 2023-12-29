@@ -1,0 +1,34 @@
+version: "3"
+
+set: [pipefail]
+
+includes:
+  tools:
+    aliases: [t]
+    taskfile: tasks/tools.yml
+  api:
+    aliases: [a]
+    taskfile: tasks/api.yml
+  autoscaler:
+    aliases: [as]
+    taskfile: tasks/autoscaler.yml
+  avorion:
+    aliases: [av]
+    taskfile: tasks/avorion.yml
+
+tasks:
+  build:
+    desc: Build all docker images
+    cmds:
+      - task: tools:docker:build
+      - task: api:docker:build
+      - task: autoscaler:docker:build
+      - task: avorion:docker:build
+  test:
+    desc: Test all apps
+    cmds:
+      - task: tools:go:test
+  deps:
+    desc: Get all dependencies
+    cmds:
+      - task: tools:go:vendor

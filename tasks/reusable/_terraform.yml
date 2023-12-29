@@ -1,0 +1,63 @@
+version: "3"
+
+includes:
+  _docker:
+    taskfile: _docker.yml
+    internal: true
+
+tasks:
+  _run-with-vars:
+    internal: true
+    cmds:
+      - task: _docker:_run
+        vars:
+          DOCKER_ARGS: -it
+          ENTRYPOINT: terraform
+          IMAGE_ARGS: '{{.IMAGE_ARGS}}'
+          IMAGE_WORKDIR: '{{.IMAGE_WORKDIR}}'
+
+  _run-on-dev:
+    internal: true
+    cmds:
+      - task: _run-with-vars
+        vars:
+          IMAGE_ARGS: '{{.IMAGE_ARGS}}'
+          IMAGE_WORKDIR: '{{.IMAGE_WORKDIR}}/terraform/envs/dev'
+
+  fmt:
+    desc: Run terraform fmt
+    vars:
+      IMAGE_WORKDIR: '{{or .IMAGE_WORKDIR (fail "Variable IMAGE_WORKDIR required")}}'
+    cmds:
+      - task: _run-with-vars
+        vars:
+          IMAGE_ARGS: fmt -recursive .
+          IMAGE_WORKDIR: '{{.IMAGE_WORKDIR}}/terraform'
+
+  init:
+    desc: Run terraform init on dev
+    cmds:
+      - task: _run-on-dev
+        vars:
+          IMAGE_ARGS: init -backend-config config.tfbackend
+
+  plan:
+    desc: Run terraform plan on dev
+    cmds:
+      - task: _run-on-dev
+        vars:
+          IMAGE_ARGS: plan -var-file config.tfvars
+
+  apply:
+    desc: Run terraform apply on dev
+    cmds:
+      - task: _run-on-dev
+        vars:
+          IMAGE_ARGS: apply -var-file config.tfvars
+
+  destroy:
+    desc: Run terraform destroy on dev
+    cmds:
+      - task: _run-on-dev
+        vars:
+          IMAGE_ARGS: destroy -var-file config.tfvars

@@ -1,0 +1,13 @@
+version: "3"
+
+vars:
+  AVORION_APP_NAME: 'avorion'
+  AVORION_IMAGE: '{{.AVORION_APP_NAME}}'
+  AVORION_IMAGE_WORKDIR: '/mnt/project'
+
+includes:
+  docker:
+    taskfile: reusable/_docker.yml
+    vars:
+      IMAGE: '{{.AVORION_IMAGE}}'
+      IMAGE_WORKDIR: '{{.AVORION_IMAGE_WORKDIR}}'

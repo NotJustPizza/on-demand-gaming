@@ -1,0 +1,20 @@
+version: "3"
+
+includes:
+  _docker:
+    taskfile: _docker.yml
+    internal: true
+
+tasks:
+  default:
+    desc: Compile .fcc to .ign
+    vars:
+      FILE_NAME: '{{or .FILE_NAME (fail "Variable FILE_NAME required")}}'
+      IMAGE_WORKDIR: '{{or .IMAGE_WORKDIR (fail "Variable IMAGE_WORKDIR required")}}'
+    cmds:
+      - task: _docker:_run
+        vars:
+          ENTRYPOINT: butane
+          IMAGE: '{{.IMAGE}}'
+          IMAGE_ARGS: '{{.FILE_NAME}}.fcc.tftpl --output {{.FILE_NAME}}.ign.tftpl'
+          IMAGE_WORKDIR: '{{.IMAGE_WORKDIR}}/butane'

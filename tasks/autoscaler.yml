@@ -1,0 +1,13 @@
+version: "3"
+
+vars:
+  AUTOSCALER_APP_NAME: 'autoscaler'
+  AUTOSCALER_IMAGE: '{{.AUTOSCALER_APP_NAME}}'
+  AUTOSCALER_IMAGE_WORKDIR: '/mnt/project'
+
+includes:
+  docker:
+    taskfile: reusable/_docker.yml
+    vars:
+      IMAGE: '{{.AUTOSCALER_IMAGE}}'
+      IMAGE_WORKDIR: '{{.AUTOSCALER_IMAGE_WORKDIR}}'

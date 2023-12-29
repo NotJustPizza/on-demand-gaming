@@ -1,0 +1,23 @@
+## Global
+# IDE files
+.idea
+# Cache
+.cache
+# Configuration vars
+.env
+.env*.local
+
+## Go
+# Dependencies
+pkg
+vendor
+
+## Terraform
+# Dependencies
+.terraform
+.terraform.lock.hcl
+# State
+*.tfstate
+# Configuration vars
+config.tfbackend
+config.tfvars
