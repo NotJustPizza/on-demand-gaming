@@ -1,10 +1,6 @@
-locals {
-  vultr_k3s_instance_label = "${local.resource_prefix}-k3s-server"
-}
-
 resource "vultr_instance" "k3s_server" {
-  label    = local.vultr_k3s_instance_label
-  hostname = local.vultr_k3s_instance_label
+  label    = "${local.resource_prefix}-k3s-server"
+  hostname = local.k3s_server_hostname
 
   os_id  = data.vultr_os.flatcar.id
   plan   = data.vultr_plan.hf1.id

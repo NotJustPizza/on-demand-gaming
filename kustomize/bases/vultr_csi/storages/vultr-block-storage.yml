@@ -1,0 +1,8 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: vultr-block-storage
+provisioner: block.csi.vultr.com
+allowVolumeExpansion: true
+parameters:
+  block_type: high_perf

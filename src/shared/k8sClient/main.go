@@ -6,6 +6,11 @@ import (
 	"k8s.io/client-go/rest"
 )
 
+const (
+	ENABLED  = "enabled"
+	DISABLED = "disabled"
+)
+
 type Config struct {
 	Namespace string
 	Clientset kubernetes.Interface

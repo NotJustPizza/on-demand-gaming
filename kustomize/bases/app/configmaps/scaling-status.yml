@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: scaling-status
+data:
+  current: "unknown"
+  expected: "unknown"

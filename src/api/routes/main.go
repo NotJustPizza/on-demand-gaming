@@ -8,6 +8,6 @@ import (
 
 func RegisterRoutes(api huma.API, tokenAuth *jwtauth.JWTAuth, k8sConfig k8sClient.Config) {
 	registerLoginRoute(api, tokenAuth)
-	registerStartGameRoute(api, k8sConfig)
-	registerStopGameRoute(api, k8sConfig)
+	registerEnableScalingRoute(api, k8sConfig)
+	registerDisableScalingRoute(api, k8sConfig)
 }

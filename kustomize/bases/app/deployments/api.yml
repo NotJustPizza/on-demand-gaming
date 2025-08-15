@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+        - name: api
+          image: sjc.vultrcr.com/images/api
+          securityContext:
+            readOnlyRootFilesystem: true
+          ports:
+            - containerPort: 8000
+              hostPort: 80
+          env:
+            - name: APP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: tf-api
+                  key: app-key
+            - name: ADMIN_PASS_HASH
+              valueFrom:
+                secretKeyRef:
+                  name: tf-api
+                  key: app-admin-pass
+          readinessProbe:
+            httpGet:
+              port: 8000
+              path: /api/health
+          livenessProbe:
+            httpGet:
+              port: 8000
+              path: /api/health

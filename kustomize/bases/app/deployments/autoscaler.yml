@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: autoscaler
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: autoscaler
+  template:
+    metadata:
+      labels:
+        app: autoscaler
+    spec:
+      containers:
+        - name: autoscaler
+          image: sjc.vultrcr.com/images/autoscaler
+          securityContext:
+            readOnlyRootFilesystem: true
+          env:
+            - name: VULTR_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: tf-vultr
+                  key: api-key
+          volumeMounts:
+            - mountPath: /etc/ignite
+              name: ignite
+      volumes:
+        - name: ignite
+          secret:
+            secretName: tf-ignite

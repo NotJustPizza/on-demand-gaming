@@ -6,53 +6,43 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	appsv1 "k8s.io/client-go/kubernetes/typed/apps/v1"
 	"k8s.io/client-go/util/retry"
-	"src/shared/valuePtr"
 )
+
+var avorionDeploymentName = "avorion"
 
 func getDeploymentClient(config Config) appsv1.DeploymentInterface {
 	return config.Clientset.AppsV1().Deployments(config.Namespace)
 }
 
-func ScaleGameDeployment(config Config, game string, enabled bool) error {
+func ScaleAvorionDeployment(config Config, replicas int32) error {
 	var client = getDeploymentClient(config)
 
-	data, err := GetGameData(config, game)
-	if err != nil {
-		zap.L().Error(
-			"Couldn't scale deployment for game, because couldn't fetch its data",
-			zap.Error(err), zap.String("game", game),
-		)
-		return err
-	}
-
-	err = retry.RetryOnConflict(retry.DefaultRetry, func() error {
-		result, getErr := client.Get(context.TODO(), data.Deployment.Name, metav1.GetOptions{})
-		if getErr != nil {
+	finalErr := retry.RetryOnConflict(retry.DefaultRetry, func() error {
+		result, err := client.Get(context.TODO(), avorionDeploymentName, metav1.GetOptions{})
+		if err != nil {
 			zap.L().Warn(
 				"Couldn't get deployment from K8s.",
-				zap.Error(err), zap.String("deployment", data.Deployment.Name),
+				zap.Error(err), zap.String("deployment", avorionDeploymentName),
 			)
-			return getErr
+			return err
 		}
-		if enabled {
-			result.Spec.Replicas = valuePtr.Int32Ptr(1)
-		} else {
-			result.Spec.Replicas = valuePtr.Int32Ptr(0)
-		}
-		_, updateErr := client.Update(context.TODO(), result, metav1.UpdateOptions{})
-		if updateErr != nil {
+
+		result.Spec.Replicas = &replicas
+
+		_, err = client.Update(context.TODO(), result, metav1.UpdateOptions{})
+		if err != nil {
 			zap.L().Warn(
 				"Couldn't update deployment in K8s.",
-				zap.Error(err), zap.String("deployment", data.Deployment.Name),
+				zap.Error(err), zap.String("deployment", avorionDeploymentName),
 			)
 		}
-		return updateErr
+		return err
 	})
-	if err != nil {
+	if finalErr != nil {
 		zap.L().Warn(
 			"Couldn't scale deployment in K8s.",
-			zap.Error(err), zap.String("deployment", data.Deployment.Name),
+			zap.Error(finalErr), zap.String("deployment", avorionDeploymentName),
 		)
 	}
-	return err
+	return finalErr
 }

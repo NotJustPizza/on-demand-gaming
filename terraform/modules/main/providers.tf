@@ -4,10 +4,6 @@ terraform {
       source  = "cloudflare/cloudflare"
       version = "4.20.0"
     }
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-      version = "2.24.0"
-    }
     kustomization = {
       source  = "kbst/kustomization"
       version = "0.9.5"
@@ -30,21 +26,21 @@ terraform {
     }
   }
 
-  required_version = "1.6.6"
+  required_version = "1.7.5"
 }
 
 provider "vultr" {
-  api_key = var.credentials.vultr.token
+  api_key = var.vultr_token
 }
 
 provider "cloudflare" {
-  api_key = var.credentials.cloudflare.token
-  email   = var.credentials.cloudflare.email
+  api_key = var.cloudflare_token
+  email   = var.cloudflare_email
 }
 
 provider "kustomization" {
   kubeconfig_raw = templatefile(
-    "../../../kubernetes/kubeconfig.yaml.tftpl",
+    "../../../kustomize/kubeconfig.yaml.tftpl",
     {
       server                     = local.k8s_server_url
       client_key_data            = base64encode(data.remote_file.k3s_file["client_key"].content)

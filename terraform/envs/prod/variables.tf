@@ -1,28 +1,18 @@
-variable "environment" {
-  type = string
-}
-variable "credentials" {
-  sensitive = true
-  type = object({
-    aws = object({
-      access_key = string
-      secret_key = string
-    })
-    cloudflare = object({
-      email  = string
-      token  = string
-      domain = string
-    })
-    vultr = object({
-      token = string
-      registry = object({
-        name     = string
-        username = string
-        api_key  = string
-      })
-    })
-  })
-}
+variable "aws_access_key" { sensitive = true }
+variable "aws_secret_key" { sensitive = true }
+
+variable "cloudflare_email" {}
+variable "cloudflare_token" { sensitive = true }
+
+variable "vultr_token" { sensitive = true }
+variable "vultr_registry_user" {}
+variable "vultr_registry_key" { sensitive = true }
+
+variable "k3s_server_token" { sensitive = true }
+
+variable "api_app_key" { sensitive = true }
+variable "api_admin_pass" { sensitive = true }
+
 variable "public_ssh_keys" {
   type    = map(string)
   default = {}

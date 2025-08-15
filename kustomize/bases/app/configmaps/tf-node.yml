@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tf-node
+data:
+  os_id: "dummy"
+  plan_id: "dummy"
+  region: "dummy"

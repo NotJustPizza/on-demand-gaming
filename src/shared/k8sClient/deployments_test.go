@@ -6,17 +6,14 @@ import (
 	"testing"
 )
 
-func TestScaleDeployment(t *testing.T) {
+func TestScaleAvorionDeployment(t *testing.T) {
 	var config = Config{
 		"test",
 		fake.NewSimpleClientset(),
 	}
 
-	FixtureGameDeployment(t, config, "test_deployment")
-	FixtureGamesConfigMap(t, config, []FixtureGame{
-		{"test", "test_deployment", "test_node"},
-	})
+	FixtureAvorionDeployment(t, config)
 
-	err := ScaleGameDeployment(config, "test", true)
+	err := ScaleAvorionDeployment(config, 1)
 	assert.NoError(t, err)
 }

@@ -79,6 +79,3 @@ func GetInstance(token string, id string) (*InstanceData, error) {
 
 	return resp.Result().(*InstanceData), err
 }
-
-func main() {
-}

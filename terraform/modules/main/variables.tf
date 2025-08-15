@@ -1,46 +1,28 @@
-variable "environment" {
-  type = string
+variable "environment" {}
+variable "project" { default = "odg" }
+
+variable "aws_access_key" { sensitive = true }
+variable "aws_secret_key" { sensitive = true }
+
+variable "cloudflare_email" {}
+variable "cloudflare_token" { sensitive = true }
+variable "cloudflare_domain" {}
+
+variable "vultr_token" { sensitive = true }
+variable "vultr_registry_user" {}
+variable "vultr_registry_key" { sensitive = true }
+
+variable "k3s_server_token" { sensitive = true }
+variable "k3s_server_version" {
+  default = "v1.28.7+k3s1"
+  description = <<EOF
+    You cannot change it without destroying cluster first.
+    Available versions: https://github.com/k3s-io/k3s/releases
+  EOF
 }
-variable "credentials" {
-  sensitive = true
-  type = object({
-    aws = object({
-      access_key = string
-      secret_key = string
-    })
-    cloudflare = object({
-      email  = string
-      token  = string
-      domain = string
-    })
-    vultr = object({
-      token = string
-      registry = object({
-        name     = string
-        username = string
-        api_key  = string
-      })
-    })
-  })
-}
-variable "versions" {
-  type = object({
-    external_dns = string
-    k3s          = string
-    key_db       = string
-    vultr_csi    = string
-  })
-  default = {
-    external_dns = "v0.14.0"
-    k3s          = "v1.29.0+k3s1"
-    key_db       = "v6.3.4"
-    vultr_csi    = "v0.11.0"
-  }
-}
-variable "project" {
-  type    = string
-  default = "odg"
-}
+variable "api_app_key" { sensitive = true }
+variable "api_admin_pass" { sensitive = true }
+
 variable "public_ssh_keys" {
   type    = map(string)
   default = {}

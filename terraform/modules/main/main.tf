@@ -1,4 +1,4 @@
-module "avorion" {
+/*module "avorion" {
   source = "../games/avorion"
 
   image_version   = "test"
@@ -13,4 +13,4 @@ module "avorion" {
   k8s_secrets = {
     docker_config = kubernetes_secret_v1.this["docker_config"].metadata[0].name
   }
-}
+}*/

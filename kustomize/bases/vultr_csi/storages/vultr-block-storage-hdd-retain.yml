@@ -1,0 +1,9 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: vultr-block-storage-hdd-retain
+provisioner: block.csi.vultr.com
+allowVolumeExpansion: true
+reclaimPolicy: Retain
+parameters:
+  block_type: storage_opt

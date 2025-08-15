@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: default
+
+images:
+  - name: sjc.vultrcr.com/images/autoscaler
+    newName: mendhak/http-https-echo
+    newTag: latest
+  - name: sjc.vultrcr.com/images/api
+    newName: mendhak/http-https-echo
+    newTag: latest
+
+resources:
+  - configmaps/scaling-status.yml
+  - configmaps/tf-node.yml
+  - deployments/api.yml
+  - deployments/autoscaler.yml
+  - secrets/docker-config.yml
+  - secrets/tf-api.yml
+  - secrets/tf-ignite.yml
+  - secrets/tf-vultr.yml
+  - clusterrole.yml
+  - clusterrolebinding.yml
+  - service.yml
+  - serviceaccount.yml

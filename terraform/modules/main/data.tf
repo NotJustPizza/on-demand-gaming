@@ -1,7 +1,7 @@
 #data "cloudflare_ip_ranges" "this" {}
 
 data "cloudflare_zone" "this" {
-  name = var.credentials.cloudflare.domain
+  name = var.cloudflare_domain
 }
 
 data "remote_file" "k3s_file" {

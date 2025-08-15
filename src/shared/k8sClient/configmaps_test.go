@@ -7,16 +7,38 @@ import (
 	"testing"
 )
 
-func TestUpdateGameData(t *testing.T) {
+func TestGetNodeConfigMap(t *testing.T) {
 	var config = Config{
 		"test",
 		fake.NewSimpleClientset(),
 	}
 
-	FixtureGamesConfigMap(t, config, []FixtureGame{
-		{"test", "test_deployment", "test_node"},
-	})
+	FixtureNodeConfigMap(t, config)
 
-	err := UpdateGameDataStatus(config, "test", GameStatus{Current: valuePtr.BoolPtr(true)})
+	_, err := GetNodeConfigMap(config)
+	assert.NoError(t, err)
+}
+
+func TestGetScalingStatusConfigMap(t *testing.T) {
+	var config = Config{
+		"test",
+		fake.NewSimpleClientset(),
+	}
+
+	FixtureScalingStatusConfigMap(t, config)
+
+	_, err := GetScalingStatusConfigMap(config)
+	assert.NoError(t, err)
+}
+
+func TestUpdateScalingStatusMap(t *testing.T) {
+	var config = Config{
+		"test",
+		fake.NewSimpleClientset(),
+	}
+
+	FixtureScalingStatusConfigMap(t, config)
+
+	err := UpdateScalingStatusConfigMap(config, ScalingStatusOptional{Current: valuePtr.StringPtr(ENABLED)})
 	assert.NoError(t, err)
 }

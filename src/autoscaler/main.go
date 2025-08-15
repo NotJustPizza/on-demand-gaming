@@ -1,9 +1,10 @@
-package autoscaler
+package main
 
 import (
 	"go.uber.org/zap"
 	"os"
 	"src/shared/k8sClient"
+	"time"
 )
 
 func init() {
@@ -16,14 +17,16 @@ func init() {
 
 func main() {
 	var k8sNamespace = loadEnvVar("K8S_NAMESPACE")
-	var vultrToken = loadEnvVar("VULTR_TOKEN")
-
 	var k8sConfig = k8sClient.Config{
 		Namespace: k8sNamespace,
 		Clientset: k8sClient.GetClientset(),
 	}
+	//var vultrToken = loadEnvVar("VULTR_TOKEN")
 
-	k8sClient.UpdateGameDataStatus()
+	for {
+		time.Sleep(time.Minute)
+		executeAutoscaling(k8sConfig)
+	}
 }
 
 func loadEnvVar(name string) string {

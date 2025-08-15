@@ -1,23 +1,18 @@
-environment = "dev"
-credentials = {
-  aws = {
-    access_key = "my_access_key"
-    secret_key = "my_secret_key"
-  }
-  cloudflare = {
-    email  = "my_cloudflare_email"
-    token  = "my_cloudflare_token"
-    domain = "my_cloudflare_domain"
-  }
-  vultr = {
-    token = "my_vultr_token"
-    registry = {
-      name     = "my_vultr_registry_name"
-      username = "my_vultr_registry_username"
-      api_key  = "my_vultr_registry_api_key"
-    }
-  }
-}
+aws_access_key = "AAAAAAAAAAAAAAA"
+aws_secret_key = "AAAAAAAAAAAAAAA"
+
+cloudflare_email = "test@example.com"
+cloudflare_token = "AAAAAAAAAAAAAAA"
+
+vultr_token         = "AAAAAAAAAAAAAAA"
+vultr_registry_user = "AAAAAAAAAAAAAAA"
+vultr_registry_key  = "AAAAAAAAAAAAAAA"
+
+k3s_server_token = "AAAAAAAAAAAAAAA"
+
+api_app_key    = "AAAAAAAAAAAAAAA"
+api_admin_pass = "AAAAAAAAAAAAAAA"
+
 public_ssh_keys = {
-  key_name = "key_content"
+  my_host = "ssh-rsa "AAAAAAAAAAAAAAA="
 }
